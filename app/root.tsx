@@ -10,7 +10,7 @@ import {
 import type { Route } from "./+types/root";
 import "./app.css";
 import { usePuterStore } from "./lib/puter";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -27,10 +27,18 @@ export const links: Route.LinksFunction = () => [
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { init } = usePuterStore();
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    init();
-  }, [init]);
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    // Only initialize Puter on the client side after hydration
+    if (isClient) {
+      init();
+    }
+  }, [init, isClient]);
 
   return (
     <html lang="en">
