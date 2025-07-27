@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import ATS from "~/components/ATS";
+import Details from "~/components/Details";
 import Summary from "~/components/Summary";
 import { usePuterStore } from "~/lib/puter";
 
@@ -14,7 +15,7 @@ const resume = () => {
   const { id } = useParams();
   const [imageUrl, setImageUrl] = useState("");
   const [resumeUrl, setResumeUrl] = useState("");
-  const [feedback, setFeedback] = useState("");
+  const [feedback, setFeedback] = useState<Feedback | null>(null);
 
   const navigate = useNavigate();
 
@@ -76,16 +77,14 @@ const resume = () => {
             </div>
           )}
         </section>
-
         <section className="feedback-section">
           <h2 className="text-4xl !text-black font-bold">Resume Review</h2>
-
           {feedback ? (
             <div className="flex flex-col gap-8 animate-in fade-in duration-1000">
               <Summary feedback={feedback} />
               <ATS
-                score={feedback.padStart.score || 0}
-                suggestions={feedback.padStart.tips || []}
+                score={feedback.ATS.score || 0}
+                suggestions={feedback.ATS.tips || []}
               />
               <Details feedback={feedback} />
             </div>
